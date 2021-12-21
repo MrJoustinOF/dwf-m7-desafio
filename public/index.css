@@ -1,0 +1,62 @@
+:root {
+  --main-color: #ff6868;
+  --second-color: #8af1ff;
+  --pink: #ff9df5;
+  --green: #97ea9f;
+  --gray: #cdcdcd;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif !important;
+}
+
+.bg-main {
+  background: var(--main-color);
+}
+
+.bg-second {
+  background: var(--second-color);
+}
+
+.bg-pink {
+  background: var(--pink);
+}
+
+.bg-green {
+  background: var(--green);
+}
+
+.bg-gray {
+  background: var(--gray);
+}
+
+.bg-black-opacity {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.text-main {
+  color: var(--main-color);
+}
+
+.text-green {
+  color: var(--green);
+}
+
+.text-blue {
+  color: #3e91dd;
+}
+
+.navbar {
+  background: var(--main-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
