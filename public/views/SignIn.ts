@@ -127,7 +127,7 @@ export const initSignIn = (params) => {
           const token = login.token;
           try {
             localStorage.setItem("token", token);
-            const user = jwt.verify(token, process.env.SECRET);
+            const user = jwt.verify(token, "dwf-m7-desafio-JOUS");
 
             state.setState({
               ...state.getState(),

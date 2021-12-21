@@ -9,7 +9,7 @@ import { state } from "./state";
   const token = localStorage.getItem("token");
   if (token) {
     try {
-      const user = jwt.verify(token, process.env.SECRET);
+      const user = jwt.verify(token, "dwf-m7-desafio-JOUS");
 
       state.setState({
         ...state.getState(),

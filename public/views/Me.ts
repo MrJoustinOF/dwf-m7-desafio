@@ -113,7 +113,7 @@ export const initMe = (params) => {
 
         if (updateUser.msg === "user updated" && updateUser.token) {
           try {
-            const user = jwt.verify(updateUser.token, process.env.SECRET);
+            const user = jwt.verify(updateUser.token, "dwf-m7-desafio-JOUS");
 
             localStorage.setItem("token", updateUser.token);
 
@@ -147,7 +147,7 @@ export const initMe = (params) => {
 
         if (signUp.msg === "user saved" && signUp.token) {
           try {
-            const user = jwt.verify(signUp.token, process.env.SECRET);
+            const user = jwt.verify(signUp.token, "dwf-m7-desafio-JOUS");
 
             localStorage.setItem("token", signUp.token);
 
