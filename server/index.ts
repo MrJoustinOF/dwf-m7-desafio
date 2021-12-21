@@ -20,7 +20,11 @@ app.use("/api/pets", petsRoutes);
 app.use("/api/sendmail", mailsRoutes);
 
 app.get("*", (req, res) => {
-  const pathJoined = path.resolve(__dirname, "./../dist/index.html");
+  // Development
+  // const pathJoined = path.resolve(__dirname, "../dist/index.html");
+
+  // Production
+  const pathJoined = path.resolve(__dirname, "../dist/index.html");
   console.log(pathJoined);
   res.sendFile(pathJoined);
 });
