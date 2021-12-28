@@ -38,7 +38,16 @@ export const initMyPets = (params) => {
 
   const fetchMyPets = async () => {
     const { id } = user;
-    const pets = await (await fetch("/api/pets/user/" + id)).json();
+    const token = localStorage.getItem("token");
+    const pets = await (
+      await fetch("/api/pets/user/" + id, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          authorization: "bearer " + token,
+        },
+      })
+    ).json();
     const myPetsContainer = el.querySelector(".myPetsContainer");
     const div = document.createElement("div");
     div.classList.add("md:grid");

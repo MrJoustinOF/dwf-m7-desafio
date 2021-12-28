@@ -79,13 +79,14 @@ export const initReportPet = (params) => {
   setTimeout(() => {
     initDropzone();
     initMapbox(petOnEdit ? petOnEdit : undefined);
-  }, 1000);
+  }, 1100);
 
   const cancelButton = el.querySelector("#cancelButton");
   cancelButton.addEventListener("click", () => params.goTo("/"));
 
   const setPetFoundButton = el.querySelector("#setPetFoundButton");
   setPetFoundButton.addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
     const url = "/api/pets/found/" + petOnEdit.id;
     const update = await (
       await fetch(url, {
@@ -93,6 +94,7 @@ export const initReportPet = (params) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          authorization: "bearer " + token,
         },
       })
     ).json();
@@ -104,6 +106,7 @@ export const initReportPet = (params) => {
 
   const deletePetButton = el.querySelector("#deletePetButton");
   deletePetButton.addEventListener("click", async () => {
+    const token = localStorage.getItem("token");
     const url = "/api/pets/" + petOnEdit.id;
     const deletePet = await (
       await fetch(url, {
@@ -111,6 +114,7 @@ export const initReportPet = (params) => {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+          authorization: "bearer " + token,
         },
       })
     ).json();
@@ -159,8 +163,8 @@ export const initReportPet = (params) => {
       errs.push("Debes agregar un lugar o ciudad como referencia");
     }
 
+    const errsContainer = document.querySelector(".errsContainer");
     if (errs.length !== 0) {
-      const errsContainer = document.querySelector(".errsContainer");
       const errsDiv = document.createElement("div");
 
       errs.map((err) => {
@@ -173,54 +177,83 @@ export const initReportPet = (params) => {
       errsContainer.firstChild?.remove();
       errsContainer.appendChild(errsDiv);
     } else {
+      errsContainer.firstChild?.remove();
       if (!petOnEdit) {
-        const { lat, lng } = petGeoloc;
-        const query = await (
-          await fetch("/api/pets/", {
-            method: "POST",
-            body: JSON.stringify({
-              name: petName.value,
-              imageData,
-              lat,
-              lng,
-              refPlace: petLocation.value,
-              UserId: user.id,
-            }),
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          })
-        ).json();
+        try {
+          const token = localStorage.getItem("token");
+          const { lat, lng } = petGeoloc;
+          const query = await (
+            await fetch("/api/pets/", {
+              method: "POST",
+              body: JSON.stringify({
+                name: petName.value,
+                imageData,
+                lat,
+                lng,
+                refPlace: petLocation.value,
+                UserId: user.id,
+              }),
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                authorization: "bearer " + token,
+              },
+            })
+          ).json();
 
-        if (query.msg === "pet saved") {
-          params.goTo("/mypets");
+          if (query.msg === "pet saved") {
+            params.goTo("/mypets");
+          }
+        } catch (err) {
+          const errsContainer = document.querySelector(".errsContainer");
+          const errDiv = document.createElement("div");
+
+          errDiv.innerHTML += `
+            <h2 class="w-60 md:w-96 mx-auto text-center text-red-700 bg-red-100 my-4 py-4 border-l-8 border-red-700">
+              Ha ocurrido un error en el envio del formulario, tu imagen es muy pesada para nuestro servidor
+            </h2>`;
+
+          errsContainer.appendChild(errDiv);
         }
       } else {
-        const url = "/api/pets/" + petOnEdit.id;
-        const query = await (
-          await fetch(url, {
-            method: "PUT",
-            body: JSON.stringify({
-              name: petName.value,
-              imageData: imageData ? imageData : petOnEdit.image,
-              lat: petGeoloc ? petGeoloc.lat : petOnEdit.lat,
-              lng: petGeoloc ? petGeoloc.lng : petOnEdit.lng,
-              refPlace: petLocation.value,
-            }),
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          })
-        ).json();
+        try {
+          const token = localStorage.getItem("token");
+          const url = "/api/pets/" + petOnEdit.id;
+          const query = await (
+            await fetch(url, {
+              method: "PUT",
+              body: JSON.stringify({
+                name: petName.value,
+                imageData: imageData ? imageData : petOnEdit.image,
+                lat: petGeoloc ? petGeoloc.lat : petOnEdit.lat,
+                lng: petGeoloc ? petGeoloc.lng : petOnEdit.lng,
+                refPlace: petLocation.value,
+              }),
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                authorization: "bearer " + token,
+              },
+            })
+          ).json();
 
-        if (query.msg === "pet updated") {
-          state.setState({
-            ...state.getState(),
-            petOnEdit: undefined,
-          });
-          params.goTo("/mypets");
+          if (query.msg === "pet updated") {
+            state.setState({
+              ...state.getState(),
+              petOnEdit: undefined,
+            });
+            params.goTo("/mypets");
+          }
+        } catch (error) {
+          const errsContainer = document.querySelector(".errsContainer");
+          const errDiv = document.createElement("div");
+
+          errDiv.innerHTML += `
+            <h2 class="w-60 md:w-96 mx-auto text-center text-red-700 bg-red-100 my-4 py-4 border-l-8 border-red-700">
+              Ha ocurrido un error en el envio del formulario, tu imagen es muy pesada para nuestro servidor
+            </h2>`;
+
+          errsContainer.appendChild(errDiv);
         }
       }
     }
@@ -229,10 +262,6 @@ export const initReportPet = (params) => {
   state.subscribe(() => {
     if (location.pathname === "/reportpet") {
       Navbar(el, params);
-
-      const currentImage: HTMLImageElement =
-        document.querySelector(".current-image");
-      currentImage.src = state.getState().imageData;
     }
   });
 

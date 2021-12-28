@@ -94,6 +94,7 @@ export const initMe = (params) => {
     if (errs.length === 0) {
       if (loged) {
         // Update user way
+        const token = localStorage.getItem("token");
         const { user } = state.getState();
         const { id, email } = user;
         const updateUser = await (
@@ -107,6 +108,7 @@ export const initMe = (params) => {
             headers: {
               Accept: "application/json",
               "Content-Type": "application/json",
+              authorization: "bearer " + token,
             },
           })
         ).json();

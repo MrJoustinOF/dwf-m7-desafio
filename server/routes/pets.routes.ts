@@ -9,22 +9,23 @@ import {
   updatePet,
   deletePet,
 } from "../controllers/petController";
+import { authMiddleware } from "./../middlewares/auth.middleware";
 const router = Router();
 
-router.post("/", savePet);
+router.post("/", authMiddleware, savePet);
 
 router.get("/", getAllPets);
 
-router.get("/user/:id", getAllUserPets);
+router.get("/user/:id", authMiddleware, getAllUserPets);
 
 router.get("/near/:lat/:lng", getPetsNearMe);
 
 router.get("/:id", getOnePet);
 
-router.put("/found/:id", setPetFound);
+router.put("/found/:id", authMiddleware, setPetFound);
 
-router.put("/:id", updatePet);
+router.put("/:id", authMiddleware, updatePet);
 
-router.delete("/:id", deletePet);
+router.delete("/:id", authMiddleware, deletePet);
 
 export default router;

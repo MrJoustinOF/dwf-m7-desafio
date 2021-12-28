@@ -10,10 +10,16 @@ export const initDropzone = () => {
   dropzoneContainer.firstElementChild.remove();
 
   myDropzone.on("thumbnail", function (file) {
+    const currentImage: HTMLImageElement =
+      document.querySelector(".current-image");
+    const { dataURL } = file;
+
     dropzoneContainer.lastElementChild.remove();
     state.setState({
       ...state.getState(),
-      imageData: file.dataURL,
+      imageData: dataURL,
     });
+
+    currentImage.src = dataURL;
   });
 };
