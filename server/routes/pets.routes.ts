@@ -1,4 +1,5 @@
 import { Router } from "express";
+import * as cors from "cors";
 import {
   savePet,
   getAllPets,
@@ -10,7 +11,10 @@ import {
   deletePet,
 } from "../controllers/petController";
 import { authMiddleware } from "./../middlewares/auth.middleware";
+import { corsOptions } from "./../middlewares/cors.middleware";
 const router = Router();
+
+router.use(cors(corsOptions));
 
 router.post("/", authMiddleware, savePet);
 

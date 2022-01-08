@@ -1,16 +1,18 @@
 import * as express from "express";
+import * as cors from "cors";
 import * as path from "path";
 import usersRoutes from "./routes/users.routes";
 import petsRoutes from "./routes/pets.routes";
 import mailsRoutes from "./routes/mails.routes";
 import { sequelize } from "./db";
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Alter tables
 // sequelize.sync({ alter: true });
 
 // Middlewares
+app.use(cors());
 app.use(express.json());
 app.use(express.static("dist"));
 

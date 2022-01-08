@@ -1,4 +1,5 @@
 import { Router } from "express";
+import * as cors from "cors";
 import {
   getAllUsers,
   createUser,
@@ -8,7 +9,10 @@ import {
   deleteUser,
 } from "../controllers/userController";
 import { authMiddleware } from "./../middlewares/auth.middleware";
+import { corsOptions } from "./../middlewares/cors.middleware";
 const router = Router();
+
+router.use(cors(corsOptions));
 
 router.post("/", createUser);
 
