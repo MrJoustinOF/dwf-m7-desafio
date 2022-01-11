@@ -51,7 +51,7 @@ const getPetsNearMe = async (req, res) => {
 
   const algoliaResponse = await algoliaIndex.search("", {
     aroundLatLng,
-    aroundRadius: 1_000_000,
+    aroundRadius: 2_000_000,
   });
 
   res.json(algoliaResponse.hits);

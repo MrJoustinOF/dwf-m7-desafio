@@ -1,6 +1,7 @@
 const whitelist = [
   "http://localhost:4040",
-  "https://dwf-m8-desafio-d0d0b.firebaseapp.com",
+  "https://m8-desafio-jous.web.app",
+  "https://m8-desafio-jous.firebaseapp.com",
   // I set this as undefined 'cause that is what a query from this site returns
   undefined,
 ];
